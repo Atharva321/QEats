@@ -23,7 +23,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 public class GetRestaurantsRequest {
-    @Getter
     @NotNull
     private Double latitude;
 
@@ -31,7 +30,9 @@ public class GetRestaurantsRequest {
     private Double longitude;
 
     private String searchFor;
-
+    public void setSearchFor(String searchFor) {
+        this.searchFor = searchFor;
+    }
     public GetRestaurantsRequest(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;

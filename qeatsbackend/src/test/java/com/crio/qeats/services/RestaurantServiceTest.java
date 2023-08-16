@@ -102,7 +102,7 @@ class RestaurantServiceTest {
     // 2. If the expected restaurants are being returned
     // HINT: Use the `loadRestaurantsDuringNormalHours` utility method to speed things up
 
-
+     assertEquals(getServingRadius(loadRestaurantsDuringNormalHours(), LocalTime.of(19, 0)), "5.0");
      assertFalse(false);
   }
 

@@ -30,20 +30,20 @@ echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/1
 
 cd ~/workspace
 # Either clone or pull latest.
-QEATS_SHARED_RESOURCES="${HOME}/workspace/qeats_shared_resources"
+QEATS_SHARED_RESOURCES="E:\Coding\Development\Crio-do\Projects\QEats\atharvapatil19202-ME_QEATS_V2\qeats_shared_resources"
 if [ ! -d $QEATS_SHARED_RESOURCES ]
 then
-    git clone git@gitlab.crio.do:me_qeats_shared/qeats_shared_resources.git $QEATS_SHARED_RESOURCES
+    git clone https://gitlab.crio.do/me_qeats_shared/qeats_shared_resources.git $QEATS_SHARED_RESOURCES
 else
     cd $QEATS_SHARED_RESOURCES
     git pull
 fi
 
-if systemctl status mongod | grep active > /dev/null; then
+if ! command -v mongod &> /dev/null; then
     echo "MongoDB is running..."
 else
     echo "MongoDB not running; Exiting"
-    exit -1
+    exit 0
 fi
 
 # Ensure a clean slate & populate all collections

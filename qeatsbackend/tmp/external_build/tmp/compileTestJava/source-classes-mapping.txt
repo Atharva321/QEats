@@ -4,3 +4,10 @@ com/crio/qeats/utils/FixtureHelpers.java
  com.crio.qeats.utils.FixtureHelpers
 com/crio/qeats/dto/RestaurantTest.java
  com.crio.qeats.dto.RestaurantTest
+com/crio/qeats/controller/RestaurantControllerTest.java
+ com.crio.qeats.controller.RestaurantControllerTest
+com/crio/qeats/services/RestaurantServiceTest.java
+ com.crio.qeats.services.RestaurantServiceTest
+ com.crio.qeats.services.RestaurantServiceTest$1
+ com.crio.qeats.services.RestaurantServiceTest$2
+ com.crio.qeats.services.RestaurantServiceTest$3
