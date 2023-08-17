@@ -1,20 +1,14 @@
-
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.lang.reflect.Array;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // TODO: CRIO_TASK_MODULE_SERIALIZATION
 //  Implement Restaurant class.
@@ -33,22 +27,48 @@ import lombok.*;
 //    "South Indian"
 //  ]
 // }
-
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Restaurant {
+    // private String id;
+
+    // @JsonProperty("restaurantId")
     private String restaurantId;
+
+    // @JsonProperty("name")
     private String name;
+
+    // @JsonProperty("city")
     private String city;
+
+    // @JsonProperty("imageUrl")
     private String imageUrl;
+
+    // @JsonProperty("latitude")
     private double latitude;
+
+    // @JsonProperty("longitude")
     private double longitude;
+
+    // @JsonProperty("opensAt")
     private String opensAt;
+
+    // @JsonProperty("closesAt")
     private String closesAt;
+
+    // @JsonProperty("attributes")
     private ArrayList<String> attributes;
 
     public Restaurant() {
 
     }
 
+    // public String getId() {
+    //     return id;
+    // }
+
+    // public void setId(String id) {
+    //     this.id = id;
+    // }
 
     public String getRestaurantId() {
         return restaurantId;

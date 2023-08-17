@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.controller;
 
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
@@ -24,16 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.crio.qeats.log.UncaughtExceptionHandler.log;
 
-
 // TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
 // Implement Controller using Spring annotations.
 // Remember, annotations have various "targets". They can be class level, method level or others.
-
-@RestController
-
-
+@RequestMapping(RestaurantController.RESTAURANT_API_ENDPOINT)
 public class RestaurantController {
-
 
   public static final String RESTAURANT_API_ENDPOINT = "/qeats/v1";
   public static final String RESTAURANTS_API = "/restaurants";
@@ -43,23 +32,32 @@ public class RestaurantController {
   public static final String CART_CLEAR_API = "/cart/clear";
   public static final String POST_ORDER_API = "/order";
   public static final String GET_ORDERS_API = "/orders";
-
+  // /qeats/v1/
   @Autowired
   private RestaurantService restaurantService;
 
-  @RequestMapping(RESTAURANT_API_ENDPOINT)
+
+
+
   @GetMapping(RESTAURANTS_API)
   public ResponseEntity<GetRestaurantsResponse> getRestaurants(
           GetRestaurantsRequest getRestaurantsRequest) {
 
     log.info("getRestaurants called with {}", getRestaurantsRequest);
     GetRestaurantsResponse getRestaurantsResponse;
+    if(getRestaurantsRequest.getLatitude() != null && getRestaurantsRequest.getLongitude() != null &&
+            getRestaurantsRequest.getLatitude() >= -90  && getRestaurantsRequest.getLongitude() >= -180 &&
+            getRestaurantsRequest.getLatitude() <=  90  && getRestaurantsRequest.getLongitude() <=  180){
 
-    //CHECKSTYLE:OFF
-    getRestaurantsResponse = restaurantService
-            .findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
-    log.info("getRestaurants returned {}", getRestaurantsResponse);
-    //CHECKSTYLE:ON
+      //CHECKSTYLE:OFF
+      getRestaurantsResponse = restaurantService
+              .findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+      log.info("getRestaurants returned {}", getRestaurantsResponse);
+      //CHECKSTYLE:ON
+    }
+    else{
+      return ResponseEntity.badRequest().body(null);
+    }
 
     return ResponseEntity.ok().body(getRestaurantsResponse);
   }
@@ -97,15 +95,20 @@ public class RestaurantController {
   // Eg:
   // curl -X GET "http://localhost:8081/qeats/v1/menu?restaurantId=11"
 
-//  @GetMapping(MENU_API)
-//  public ResponseEntity<GetRestaurantsResponse> getMenu(
-//          @RequestParam("restaurantId") String restaurantId) {
-//    GetRestaurantsResponse getRestaurantsResponse;
-//    //CHECKSTYLE:OFF
-//    getRestaurantsResponse = restaurantService.getMenu(restaurantId);
-//    log.info("getMenu returned {}", getRestaurantsResponse);
-//    //CHECKSTYLE:ON
-//
-//    return ResponseEntity.ok().body(getRestaurantsResponse);
-//  }
+  // @GetMapping(RESTAURANTS_API)
+  // public ResponseEntity<GetRestaurantsResponse> getRestaurants(
+  //      GetRestaurantsRequest getRestaurantsRequest) {
+
+  //   log.info("getRestaurants called with {}", getRestaurantsRequest);
+  //   GetRestaurantsResponse getRestaurantsResponse;
+
+  //     //CHECKSTYLE:OFF
+  //     getRestaurantsResponse = restaurantService
+  //         .findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+  //     log.info("getRestaurants returned {}", getRestaurantsResponse);
+  //     //CHECKSTYLE:ON
+
+  //   return ResponseEntity.ok().body(getRestaurantsResponse);
+  // }
 }
+
