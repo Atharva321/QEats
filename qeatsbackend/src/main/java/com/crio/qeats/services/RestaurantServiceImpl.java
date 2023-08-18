@@ -44,24 +44,29 @@ public class RestaurantServiceImpl implements RestaurantService {
     double lattitude = getRestaurantsRequest.getLatitude();
     double longitude = getRestaurantsRequest.getLongitude();
     List<Restaurant> restaurants = new ArrayList<>();
+    getRestaurantsResponse = new GetRestaurantsResponse();
 
-    RestaurantRepositoryServiceDummyImpl restaurantRepositoryServiceDummy = new RestaurantRepositoryServiceDummyImpl();
+    // RestaurantRepositoryServiceDummyImpl restaurantRepositoryServiceDummy = new RestaurantRepositoryServiceDummyImpl();
     // Check if the current time falls within peak hours
 
-    if ((currentTime.isAfter(LocalTime.of(8, 0)) && currentTime.isBefore(LocalTime.of(10, 0)))
-            || (currentTime.isAfter(LocalTime.of(13, 0)) && currentTime.isBefore(LocalTime.of(14, 0)))
-            || (currentTime.isAfter(LocalTime.of(19, 0)) && currentTime.isBefore(LocalTime.of(21, 0)))) {
+    if ((currentTime.isAfter(LocalTime.of(7, 59)) && currentTime.isBefore(LocalTime.of(10, 01)))
+            || (currentTime.isAfter(LocalTime.of(12, 59)) && currentTime.isBefore(LocalTime.of(14, 01)))
+            || (currentTime.isAfter(LocalTime.of(18, 59)) && currentTime.isBefore(LocalTime.of(21, 01)))) {
       // Set serving radius to 3KMs
-      getRestaurantsResponse.setRestaurants(restaurantRepositoryServiceDummy.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, peakHoursServingRadiusInKms));
+      restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, peakHoursServingRadiusInKms));
       // if(restaurants.size() < 10){
-      //   getRestaurantsResponse.setRestaurants(restaurantRepositoryServiceDummy.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, normalHoursServingRadiusInKms));
+      // //   getRestaurantsResponse.setRestaurants
+      // restaurants = new ArrayList<>(restaurantRepositoryServiceDummy.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, normalHoursServingRadiusInKms));
       // }
     } else {
       // Set serving radius to 5KMs
-      getRestaurantsResponse.setRestaurants(restaurantRepositoryServiceDummy.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, normalHoursServingRadiusInKms));
+      // getRestaurantsResponse.setRestaurants(
+      restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(lattitude, longitude, currentTime, normalHoursServingRadiusInKms));
     }
 
-    System.out.println(getRestaurantsResponse.getRestaurants());
+    getRestaurantsResponse.setRestaurants(restaurants);
+
+    // System.out.println(getRestaurantsResponse.getRestaurants());
 
 
     return getRestaurantsResponse;
@@ -71,3 +76,4 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 
 }
+

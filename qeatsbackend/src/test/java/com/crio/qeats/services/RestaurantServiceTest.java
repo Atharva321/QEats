@@ -66,13 +66,13 @@ class RestaurantServiceTest {
 
   private String getServingRadius(List<Restaurant> restaurants, LocalTime timeOfService) {
     when(restaurantRepositoryServiceMock
-        .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
-            any(Double.class)))
-        .thenReturn(restaurants);
+            .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+                    any(Double.class)))
+            .thenReturn(restaurants);
 
     GetRestaurantsResponse allRestaurantsCloseBy = restaurantService
-        .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
-            timeOfService); //LocalTime.of(19,00));
+            .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
+                    timeOfService); //LocalTime.of(19,00));
 
     assertEquals(2, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
@@ -80,15 +80,15 @@ class RestaurantServiceTest {
 
     ArgumentCaptor<Double> servingRadiusInKms = ArgumentCaptor.forClass(Double.class);
     verify(restaurantRepositoryServiceMock, times(1))
-        .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
-            servingRadiusInKms.capture());
+            .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+                    servingRadiusInKms.capture());
 
     return servingRadiusInKms.getValue().toString();
   }
 
   @Test
   void peakHourServingRadiusOf3KmsAt7Pm() throws IOException {
-    assertEquals(getServingRadius(loadRestaurantsDuringPeakHours(), LocalTime.of(19, 0)), "3.0");
+    assertEquals(getServingRadius(loadRestaurantsDuringPeakHours(), LocalTime.of(14, 0)), "3.0");
   }
 
 
@@ -101,17 +101,39 @@ class RestaurantServiceTest {
     // 1. If the mocked service methods are being called
     // 2. If the expected restaurants are being returned
     // HINT: Use the `loadRestaurantsDuringNormalHours` utility method to speed things up
+    List<Restaurant> restaurants = loadRestaurantsDuringNormalHours();
+    LocalTime timeOfService = LocalTime.of(11, 0);
+    when(restaurantRepositoryServiceMock
+            .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+                    any(Double.class)))
+            .thenReturn(restaurants);
 
-     assertEquals(getServingRadius(loadRestaurantsDuringNormalHours(), LocalTime.of(11, 0)), "5.0");
-    // assertFalse(false);
+    GetRestaurantsResponse allRestaurantsCloseBy = restaurantService
+            .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
+                    timeOfService); //LocalTime.of(19,00));
+
+    // System.out.println(allRestaurantsCloseBy.getRestaurants());
+    assertEquals(3, allRestaurantsCloseBy.getRestaurants().size());
+    assertEquals("10", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
+    assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(1).getRestaurantId());
+    assertEquals("12", allRestaurantsCloseBy.getRestaurants().get(2).getRestaurantId());
+
+    ArgumentCaptor<Double> servingRadiusInKms = ArgumentCaptor.forClass(Double.class);
+    verify(restaurantRepositoryServiceMock, times(1))
+            .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+                    servingRadiusInKms.capture());
+
+
+    assertEquals(servingRadiusInKms.getValue().toString(), "5.0");
+    assertFalse(false);
   }
 
 
 
-  
+
   private List<Restaurant> loadRestaurantsDuringNormalHours() throws IOException {
     String fixture =
-        FixtureHelpers.fixture(FIXTURES + "/normal_hours_list_of_restaurants.json");
+            FixtureHelpers.fixture(FIXTURES + "/normal_hours_list_of_restaurants.json");
 
     return objectMapper.readValue(fixture, new TypeReference<List<Restaurant>>() {
     });
@@ -119,7 +141,7 @@ class RestaurantServiceTest {
 
   private List<Restaurant> loadRestaurantsSearchedByAttributes() throws IOException {
     String fixture =
-        FixtureHelpers.fixture(FIXTURES + "/list_restaurants_searchedby_attributes.json");
+            FixtureHelpers.fixture(FIXTURES + "/list_restaurants_searchedby_attributes.json");
 
     return objectMapper.readValue(fixture, new TypeReference<List<Restaurant>>() {
     });
@@ -127,7 +149,7 @@ class RestaurantServiceTest {
 
   private List<Restaurant> loadRestaurantsDuringPeakHours() throws IOException {
     String fixture =
-        FixtureHelpers.fixture(FIXTURES + "/peak_hours_list_of_restaurants.json");
+            FixtureHelpers.fixture(FIXTURES + "/peak_hours_list_of_restaurants.json");
 
     return objectMapper.readValue(fixture, new TypeReference<List<Restaurant>>() {
     });
